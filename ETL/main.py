@@ -2,6 +2,17 @@ import requests
 import re
 import json
 import time
+from db_connection import client
+
+##Database details
+
+main=client.coffee  #base de datos
+
+robusta=main.robusta    #colección de granos robusta
+arabica=main.arabica    #colección de grans arábica
+
+###########
+
 
 
 #Obtiene solo los ids que estan en el archivo de texto y los guarda en el array "id"
@@ -38,10 +49,10 @@ def extract_relevant_data(data):
             'flavor':data['grade'].get('flavor',{}),
             'aftertaste':data['grade'].get('after',{}),
             'acidity':data['grade'].get('acidity',{}),
-            'body/mouthfeel':(
+            'body/mouthfeel':round(
                 data.get('grade').get('body',{}) 
                 if data.get('grade').get('body',{}) != 0 
-                else data.get('grade').get('mouthfeel', 0)
+                else data.get('grade').get('mouthfeel', 0), 1
             ),
             'balance':data['grade'].get('balance',{}),
             'uniformity':data['grade'].get('uniformity',{}),
@@ -84,8 +95,10 @@ def main():
             print(f'No data with id {id} found, proceeding with the next one...')
         time.sleep(1)
 
-    with open('robusta_data2024', 'w', encoding='utf-8') as file:
+    with open('../robusta_data2024', 'w', encoding='utf-8') as file:
+        file.write('')
         json.dump(clean_data,file, ensure_ascii=False, indent=4)
 
 if __name__=='__main__':
     main()
+    load()
