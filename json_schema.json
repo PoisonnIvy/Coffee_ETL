@@ -1,0 +1,22 @@
+    
+    {
+        "species":"String",
+        "country": "String",
+        "harvest_year": "Int",
+        "grading_year": "Int",
+        "grade": {
+            "aroma": "Float",
+            "flavor": "Float",
+            "aftertaste": "Float",
+            "acidity": "Float",
+            "body/mouthfeel": "Float",
+            "balance": "Float",
+            "uniformity": "Float",
+            "clean-cup": "Float",
+            "sweetness": "Float",
+            "overall": "Float",
+            "total_points":"Float"
+        },
+        "moisture": "Float"
+    }
+
