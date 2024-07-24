@@ -1,12 +1,12 @@
-from db_connection import client
+from mongo_db_connection import client
 from pymongo import errors as er
 from bson import errors
 import json
 
 #-- database config --#
-DB=client.coffee_beans
+DB=client.coffee_beans2
 
-rating=DB.ratings
+rating=DB.ratings2
 
 #-<----------------->-#
 

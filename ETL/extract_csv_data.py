@@ -1,14 +1,13 @@
 import csv
 import json
 import sys
-import os
 
 
 def main():
     #columnas que son de interés para el análisis
     data=[1,3,15,16,20,21,22,23,24,25,26,27,28,29,30,31,0]
     types=["robusta","arabica"]
-    #verifica si hay valores de interés vacíos en el archivo .csv, si los hay se pueden eliminar manual o automaticamente
+    #verifica si hay valores de interés vacíos en el archivo .csv, si los hay se pueden eliminar automaticamente
 
     for type in types:
         empty_values(type,data)
@@ -22,7 +21,7 @@ def main():
 def empty_values(coffee_type,value):
 
     empty=[]
-    with open (f'../2018/{coffee_type}_2018.csv','r', encoding="utf-8") as file:
+    with open (f'raw_csv/{coffee_type}_2018.csv','r', encoding="utf-8") as file:
         reader=csv.reader(file,delimiter=',')
         next(reader)
         for line in reader:
@@ -37,15 +36,25 @@ def empty_values(coffee_type,value):
             sys.exit(0)
         else:
             delete_empty_values(coffee_type,empty)
+    else: 
+        input_file = f'raw_csv/{coffee_type}_2018.csv'
+        output_file = f'../2018/{coffee_type}_2018.csv'
+        with open(input_file, 'r', encoding="utf-8") as file_in, \
+             open(output_file, 'w', newline='', encoding="utf-8") as file_out:
+            file_out.write('')
+            reader = csv.reader(file_in)
+            writer = csv.writer(file_out)
+            for row in reader:
+                writer.writerow(row)
 
 def delete_empty_values(coffee_type,empty):
 
-    input_file = f'../2018/{coffee_type}_2018.csv'
-    output_file = f'../2018/{coffee_type}_temp.csv'
+    input_file = f'raw_csv/{coffee_type}_2018.csv'
+    output_file = f'../2018/{coffee_type}_2018.csv'
     
     with open(input_file, 'r', encoding="utf-8") as file_in, \
          open(output_file, 'w', newline='', encoding="utf-8") as file_out:
-        
+        file_out.write('')
         reader = csv.reader(file_in)
         writer = csv.writer(file_out)
         deleted = 0
@@ -54,8 +63,7 @@ def delete_empty_values(coffee_type,empty):
                 writer.writerow(row)
             else:
                 deleted += 1
-    
-    os.replace(output_file, input_file)
+
     print(f"Se borraron los siguientes ids de {coffee_type}: {empty}\nEn total fueron {deleted} filas.")
 
 
@@ -84,10 +92,10 @@ def values_to_json(coffee_type,values):
                     'flavor': array[5],
                     'aftertaste': array[6],
                     'acidity': array[7],
-                    'body/mouthfeel': array[8],
+                    'body_mouthfeel': array[8],
                     'balance': array[9],
                     'uniformity': array[10],
-                    'clean-cup': array[11],
+                    'clean_cup': array[11],
                     'sweetness': array[12],
                     'overall': array[13],
                     'total_points': array[14]

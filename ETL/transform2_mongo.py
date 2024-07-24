@@ -73,10 +73,10 @@ def new_data(coffee_type):
             flavor=bean['grade'].get('flavor')
             aftertaste=bean['grade'].get('aftertaste')
             acidity=bean['grade'].get('acidity')
-            body_mouth=bean['grade'].get('body/mouthfeel')
+            body_mouth=bean['grade'].get('body_mouthfeel')
             balance=bean['grade'].get('balance')
             uniformity=bean['grade'].get('uniformity')
-            clean_cup=bean['grade'].get('clean-cup')
+            clean_cup=bean['grade'].get('clean_cup')
             sweetness=bean['grade'].get('sweetness')
             overall=bean['grade'].get('overall')
             moisture=bean.get('moisture')
@@ -98,7 +98,7 @@ def new_data(coffee_type):
                 aux['grade']['flavor']=round(flavor,2)
                 aux['grade']['aftertaste']=round(aftertaste,2)
                 aux['grade']['acidity']=round(acidity,2)
-                aux['grade']['body/mouthfeel']=round(body_mouth,2)
+                aux['grade']['body_mouthfeel']=round(body_mouth,2)
                 aux['grade']['balance']=round(balance,2)
                 aux['grade']['uniformity']=round(uniformity,2)
                 aux['grade']['clean_cup']=round(clean_cup,2)
@@ -134,7 +134,7 @@ def old_data(coffee_type):
             #revisar que solo sea del tipo especificado
             if species!= coffee_type: 
                 invalid_data.append(bean)
-                print("no the same type")
+                print("not the same type")
                 continue #si ya tiene un dato invalido no necesita seguir viendo los demas
             if country.strip() == '':
                     invalid_data.append(bean)
@@ -167,7 +167,7 @@ def old_data(coffee_type):
                 g_year=int(g_year)
             except:
                 invalid_data.append(bean)
-                print("not a number year")
+                print("not a year number")
                 continue
             else:
                 aux['control_id']= control_id
@@ -180,10 +180,10 @@ def old_data(coffee_type):
             flavor=bean['grade'].get('flavor')
             aftertaste=bean['grade'].get('aftertaste')
             acidity=bean['grade'].get('acidity')
-            body_mouth=bean['grade'].get('body/mouthfeel')
+            body_mouth=bean['grade'].get('body_mouthfeel')
             balance=bean['grade'].get('balance')
             uniformity=bean['grade'].get('uniformity')
-            clean_cup=bean['grade'].get('clean-cup')
+            clean_cup=bean['grade'].get('clean_cup')
             sweetness=bean['grade'].get('sweetness')
             overall=bean['grade'].get('overall')
             total_points=bean['grade'].get('total_points')
@@ -206,7 +206,7 @@ def old_data(coffee_type):
                 aux['grade']['flavor']=round(flavor,2)
                 aux['grade']['aftertaste']=round(aftertaste,2)
                 aux['grade']['acidity']=round(acidity,2)
-                aux['grade']['body/mouthfeel']=round(body_mouth,2)
+                aux['grade']['body_mouthfeel']=round(body_mouth,2)
                 aux['grade']['balance']=round(balance,2)
                 aux['grade']['uniformity']=round(uniformity,2)
                 aux['grade']['clean_cup']=round(clean_cup,2)

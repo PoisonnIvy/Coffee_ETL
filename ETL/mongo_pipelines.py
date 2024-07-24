@@ -1,6 +1,4 @@
-from db_connection import client
-import pymongo
-from pprint import pprint
+from mongo_db_connection import client
 
 DB=client.coffee_beans
 collection=DB.ratings
@@ -11,7 +9,6 @@ def main():
     print("Los países que en promedio obtienen puntuaciones mas altas son:")
     for country in top_countries:
         print(f"{country['_id']}: {country['averageScore']:.2f} puntos")
-    print("\n")
 
     comparison = compare_species()
     print("Comparación entre especies de café:")
@@ -34,22 +31,10 @@ def main():
     best_category = max(moisture_analysis, key=lambda x: x['avg_score'])
 
     if best_category['_id'] == 0:
-        print("Los cafés con mayor puntuación tienden a tener un nivel de humedad menor al 10%.")
+        print("Los cafés con mayor puntuación tienden a tener un nivel de humedad menor al 5%.")
     else:
         print(f"Los cafés con mayor puntuación tienden a tener un nivel de humedad entre {best_category['_id']}% y {best_category['_id']+1}%.\n")
     
-    year_analysis = analyze_harvest_grading_year()
-    print("Análisis del efecto del año de cosecha y calificación en las calificaciones de café:")
-    for res in year_analysis:
-        harvest_year = res['_id']['harvest_year']
-        grading_year = res['_id']['grading_year']
-        print(f"\nAño de cosecha: {harvest_year}, Año de calificación: {grading_year}")
-        print(f"Número de muestras: {res['count']}")
-        print(f"Puntuación promedio: {res['avg_score']:.2f}")
-        print(f"Aroma promedio: {res['avg_aroma']:.2f}")
-        print(f"Sabor promedio: {res['avg_flavor']:.2f}")
-        print(f"Acidez promedio: {res['avg_acidity']:.2f}")
-        print(f"Cuerpo promedio: {res['avg_body']:.2f}")
 
 
 def get_top_coffee_countries(limit=3):
@@ -57,7 +42,13 @@ def get_top_coffee_countries(limit=3):
         {
             "$group": {
                 "_id": "$country",
-                "averageScore": {"$avg": "$grade.total_points"}
+                "averageScore": {"$avg": "$grade.total_points"},
+                "count":{"$sum": 1}
+            }
+        },
+        {
+            "$match":{
+                "count": {"$gt": 30}
             }
         },
         {
@@ -95,16 +86,14 @@ def compare_species():
     
     results = list(collection.aggregate(pipeline))
     return results
-    
-#def format_value(value):
-#   return f"{value:.2f}" if value is not None else "N/A"
+
 
 def analyze_moisture():
     pipeline = [
         {
             "$bucket": {
                 "groupBy": "$moisture",
-                "boundaries": [0, 10, 11, 12, 13, 14, 15, 100],
+                "boundaries": [0,9,10, 11, 12, 13, 14, 15, 100],
                 "default": "Unknown",
                 "output": {
                     "count": {"$sum": 1},
@@ -115,36 +104,16 @@ def analyze_moisture():
             }
         },
         {
-            "$sort": {"_id": 1}
+            "$match":{"count":{"$gt":40}}
+        },
+        {
+            "$sort": {"avg_score": 1}
         }
     ]
     
     results = list(collection.aggregate(pipeline))
     return results
 
-def analyze_harvest_grading_year():
-    pipeline = [
-        {
-            "$group": {
-                "_id": {
-                    "harvest_year": "$harvest_year",
-                    "grading_year": "$grading_year"
-                },
-                "avg_score": {"$avg": "$grade.total_points"},
-                "count": {"$sum": 1},
-                "avg_aroma": {"$avg": "$grade.aroma"},
-                "avg_flavor": {"$avg": "$grade.flavor"},
-                "avg_acidity": {"$avg": "$grade.acidity"},
-                "avg_body": {"$avg": "$grade.body/mouthfeel"}
-            }
-        },
-        {
-            "$sort": {"_id.haversting_year": 1, "_id.grading_year": 1}
-        }
-    ]
-    
-    results = list(collection.aggregate(pipeline))
-    return results
 
 if __name__=='__main__':
     main()

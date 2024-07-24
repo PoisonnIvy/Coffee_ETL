@@ -9,7 +9,7 @@ def main():
     unavailable_ids=[]
     type=["robusta","arabica"]
     for x in type:
-        bean_id=find_all(f"raw_ids/{x}_ids.txt")
+        bean_id=find_all(f"raw_json_ids/{x}_ids.txt")
         for ids in bean_id:
             data=fetch_data(ids)
             if data:
@@ -22,7 +22,7 @@ def main():
             with open(f'../2024/{x}_unavailable.txt', 'w', encoding="utf-8") as u:
                 u.write('')
                 for ids in unavailable_ids:
-                    u.write(ids)
+                    u.write(f"{ids}\n")
         with open(f'../2024/{x}_data2024.json', 'w', encoding='utf-8') as file:
             file.write('')
             json.dump(clean_data,file, ensure_ascii=False, indent=4)
@@ -73,14 +73,14 @@ def extract_relevant_data(data):
             'flavor':data.get('grade').get('flavor',{}),
             'aftertaste':data.get('grade').get('after',{}),
             'acidity':data.get('grade').get('acidity',{}),
-            'body/mouthfeel':(
+            'body_mouthfeel':(
                 data.get('grade').get('body',{}) 
                 if data.get('grade').get('body',{}) != 0 
                 else data.get('grade').get('mouthfeel', 0)
                 ),
             'balance':data.get('grade').get('balance',{}),
             'uniformity':data.get('grade').get('uniformity',{}),
-            'clean-cup':data.get('grade').get('clean',{}),
+            'clean_cup':data.get('grade').get('clean',{}),
             'sweetness':data.get('grade').get('sweet',{}),
             'overall':data.get('grade').get('overall',{}),
             'total_points':data.get('grade').get('total',{}),
