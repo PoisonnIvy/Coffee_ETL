@@ -1,6 +1,6 @@
 .venv/
 .env
-ETL/__pycache__/
-2024/
-2018/
+**/__pycache__/
+**/2024/
+**/2018/
 Neo4j-902ea9fa-Created-2024-07-20.txt
